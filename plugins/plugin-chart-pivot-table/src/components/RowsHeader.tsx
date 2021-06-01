@@ -24,13 +24,13 @@ import HeadersOfHeader from './HeaderOfHeader';
 import { ShowTotal } from '../types';
 
 type RowsHeaderProps<R extends string, C extends string> = {
-  uiRowUnits: Unit<R>;
-  rows: R[];
-  columns: C[];
-  showTotal: ShowTotal;
-  numberOfRows: number;
-  rowsFillData: boolean[];
-  compactView: boolean;
+   uiRowUnits: Unit<R>;
+   rows: R[];
+   columns: C[];
+   showTotal: ShowTotal;
+   numberOfRows: number;
+   rowsFillData: boolean[];
+   compactView: boolean;
 };
 
 const TotalGridItem = styled(GridItem)`
@@ -39,49 +39,55 @@ const TotalGridItem = styled(GridItem)`
 `;
 
 const RowsHeader: FC<RowsHeaderProps<string, string>> = ({
-  numberOfRows,
-  columns,
-  rows,
-  compactView,
-  uiRowUnits,
-  rowsFillData,
-  showTotal,
+   numberOfRows,
+   columns,
+   rows,
+   compactView,
+   uiRowUnits,
+   rowsFillData,
+   showTotal,
 }) => (
-  <div>
-    <Grid gridTemplateColumns="1fr" gridTemplateRows="max-content max-content">
-      <HeadersOfHeader rows={rows} columns={columns} />
-      <UIGridContainer
-        withoutOverflow
-        gridTemplateColumns={`repeat(${rows.length || 1}, max-content)`}
-        gridTemplateRows={`${compactView ? 0 : 'max-content'} ${rowsFillData
-          .map(fillData => `${fillData ? ROW_HEIGHT : 0}px`)
-          .join(' ')}`}
-        gridAutoFlow="column"
-      >
-        {rows.map((row, rowIndex) =>
-          uiRowUnits[row].map((item, index) => (
-            // eslint-disable-next-line react/jsx-key
-            <InvisibleGridItem
-              invisible={compactView && index === 0}
-              bordered
-              header={index === 0}
-              bgLevel={rowIndex === rows.length - 1 ? undefined : 5}
-              justifyContent="flex-start"
-              // If index === 0, it's header of columns for rows
-              gridRow={`span ${index === 0 ? 1 : numberOfRows / (uiRowUnits[row].length - 1)}`}
-            >
-              <div>{item}</div>
-            </InvisibleGridItem>
-          )),
-        )}
-      </UIGridContainer>
-    </Grid>
-    {(showTotal === ShowTotal.columnsAndRows || showTotal === ShowTotal.columns) && (
-      <TotalGridItem gridColumn={`span ${rows.length || 1}`} justifyContent="flex-start">
-        <div>{t('Total')}</div>
-      </TotalGridItem>
-    )}
-  </div>
+   <div>
+      <Grid gridTemplateColumns="1fr" gridTemplateRows="max-content max-content">
+         <HeadersOfHeader rows={rows} columns={columns} />
+         <UIGridContainer
+            withoutOverflow
+            gridTemplateColumns={`repeat(${rows.length || 1}, max-content)`}
+            gridTemplateRows={`${compactView ? 0 : 'max-content'} ${rowsFillData
+               .map(fillData => `${fillData ? ROW_HEIGHT : 0}px`)
+               .join(' ')}`}
+            gridAutoFlow="column"
+         >
+            {rows.map((row, rowIndex) =>
+               uiRowUnits[row].map((item, index) => (
+                  // eslint-disable-next-line react/jsx-key
+                  <InvisibleGridItem
+                     invisible={compactView && index === 0}
+                     bordered
+                     header={index === 0}
+                     bgLevel={rowIndex === rows.length - 1 ? undefined : 5}
+                     justifyContent="flex-end"
+                     // If index === 0, it's header of columns for rows
+                     gridRow={`span ${index === 0 ? 1 : numberOfRows / (uiRowUnits[row].length - 1)}`}
+                  >
+                     <label style={{
+                        display: 'flex',
+                        marginLeft: 'auto'
+                     }} >
+                        <div>{item}</div>
+                        <input type="checkbox" />
+                     </label>
+                  </InvisibleGridItem>
+               )),
+            )}
+         </UIGridContainer>
+      </Grid>
+      {(showTotal === ShowTotal.columnsAndRows || showTotal === ShowTotal.columns) && (
+         <TotalGridItem gridColumn={`span ${rows.length || 1}`} justifyContent="flex-start">
+            <div>{t('Total')}</div>
+         </TotalGridItem>
+      )}
+   </div>
 );
 
 export default RowsHeader;
